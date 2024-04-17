@@ -1,8 +1,6 @@
 package io.vb2.CurrencyConverterBot.service;
 
 import io.vb2.CurrencyConverterBot.config.BotConfig;
-import io.vb2.CurrencyConverterBot.service.ConverterService.CurrencyConverter;
-import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
@@ -12,18 +10,22 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 @Slf4j
 @Component
-@AllArgsConstructor
 public class TelegramBot extends TelegramLongPollingBot {
-    private final BotConfig config;
-    private final CurrencyManager currencyManager;
+
+    final BotConfig config;
+
+    public TelegramBot(BotConfig config) {
+        this.config = config;
+    }
+
     @Override
     public String getBotUsername() {
-        return config.getBOT_NAME();
+        return config.getBotName();
     }
 
     @Override
     public String getBotToken() {
-        return config.getBOT_TOKEN();
+        return config.getBotToken();
     }
 
     @Override
@@ -31,20 +33,21 @@ public class TelegramBot extends TelegramLongPollingBot {
         if (update.hasMessage() && update.getMessage().hasText()) {
             String messageText = update.getMessage().getText();
             long chatId = update.getMessage().getChatId();
-
-            if (messageText.matches("\\b[a-zA-Z]{3,4}\\b\\s[a-zA-Z]{3,4}\\b")){
-                currencyManager.updateConverter(baseCurrency, targetCurrency);
+            switch (messageText) {
+                case "/start":
+                    startCommandReceived(chatId, update.getMessage().getChat().getFirstName());
+                    break;
+                default:
+                    sendMessage(chatId, "Sorry, command was not recognized.");
+                    break;
             }
-
-//              SendMessage message = new SendMessage(); // Create a message object object
-//            message.setChatId(chatId);
-//            message.setText(messageText);
-//            try {
-//                execute(message); // Sending our message object to user
-//            } catch (TelegramApiException e) {
-//                log.error("Error occurred: " + e.getMessage());
-//            }
         }
+    }
+
+    private void startCommandReceived(long chatId, String name) {
+        String answer = "Hi, " + name + "!";
+        log.info("Replied to user " + name);
+        sendMessage(chatId, answer);
     }
 
     private void sendMessage(long chatId, String textToSend) {
@@ -54,9 +57,9 @@ public class TelegramBot extends TelegramLongPollingBot {
 
         try {
             execute(message);
-        } catch (TelegramApiException e) {
+        }
+        catch (TelegramApiException e) {
             log.error("Error occurred: " + e.getMessage());
         }
     }
 }
-
