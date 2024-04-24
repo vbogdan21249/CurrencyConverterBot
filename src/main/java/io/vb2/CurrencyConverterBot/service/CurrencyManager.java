@@ -13,7 +13,7 @@ import java.math.BigDecimal;
 @Component
 public class CurrencyManager {
     private Currency baseCurrency = Currency.UAH;
-    private Currency targetCurrency;
+    private Currency targetCurrency = Currency.USD;
 
     public BigDecimal convert(BigDecimal value) throws IOException {
         return value.multiply(Converter.convert(baseCurrency, targetCurrency));
