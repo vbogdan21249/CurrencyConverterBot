@@ -18,7 +18,6 @@ public class NBUSource extends ConverterSource {
     @Override
     public BigDecimal rate(Currency from, Currency to) throws IOException {
         String collected = NetworkUtils.getBufferReaderByUrl(getUrlString(to), true);
-
         Gson gson = new Gson();
         NBUCurrencyModel[] currencyModels = gson.fromJson(String.valueOf(collected), NBUCurrencyModel[].class);
         NBUCurrencyModel model = currencyModels[0];
