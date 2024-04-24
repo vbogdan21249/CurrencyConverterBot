@@ -4,7 +4,7 @@ import com.google.gson.annotations.SerializedName;
 import lombok.Data;
 
 @Data
-public class CurrencyModel {
+public class NBUCurrencyModel {
     @SerializedName("r030")
     private Integer curCode;
 
