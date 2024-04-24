@@ -3,6 +3,8 @@ package models;
 import com.google.gson.annotations.SerializedName;
 import lombok.Data;
 
+import java.math.BigDecimal;
+
 @Data
 public class NBUCurrencyModel {
     @SerializedName("r030")
@@ -12,7 +14,7 @@ public class NBUCurrencyModel {
     private String curName;
 
     @SerializedName("rate")
-    private Double curRate;
+    private BigDecimal curRate;
 
     @SerializedName("cc")
     private String curAbbreviation;
