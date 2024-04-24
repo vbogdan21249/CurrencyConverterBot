@@ -10,4 +10,8 @@ public class Messages {
     public static String getServiceNetworkErrorMessage(String serviceResponse) {
         return "Service unavailable. Response: " + serviceResponse;
     }
+
+    public static String getInvalidCurrencyMessage(String exceptionMessage) {
+        return "Error updating currencies: " + exceptionMessage;
+    }
 }

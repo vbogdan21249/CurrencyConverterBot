@@ -1,7 +1,6 @@
 package io.vb2.CurrencyConverterBot.service;
 
 import io.vb2.CurrencyConverterBot.config.BotConfig;
-import io.vb2.CurrencyConverterBot.service.ConverterService.CurrencyConverter;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -9,6 +8,11 @@ import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
+
+import java.io.IOException;
+import java.math.BigDecimal;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @Slf4j
 @Component
@@ -33,7 +37,20 @@ public class TelegramBot extends TelegramLongPollingBot {
             long chatId = update.getMessage().getChatId();
 
             if (messageText.matches("\\b[a-zA-Z]{3,4}\\b\\s[a-zA-Z]{3,4}\\b")){
-                currencyManager.updateConverter(baseCurrency, targetCurrency);
+                Pattern pattern = Pattern.compile("\\b[a-zA-Z]{3,4}\\b\\s[a-zA-Z]{3,4}\\b");
+                Matcher matcher = pattern.matcher(messageText);
+                if (matcher.find()) {
+                    String baseCurrency = matcher.group(1);
+                    String targetCurrency = matcher.group(2);
+                    currencyManager.updateConverter(baseCurrency, targetCurrency);
+                }
+            }
+            else {
+                try {
+                    sendMessage(chatId, currencyManager.convert(new BigDecimal(messageText)).toString());
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
             }
 
 //              SendMessage message = new SendMessage(); // Create a message object object
