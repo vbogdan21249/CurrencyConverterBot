@@ -9,11 +9,10 @@ import java.io.IOException;
 import java.math.BigDecimal;
 
 public class Converter {
-    private static Config config;
-    CurrencyRate currencyRate;
+
     private static ConverterSource converterSource;
 
     public static BigDecimal convert(Currency from, Currency to) throws IOException {
-        return converterSource.rate(config.getCurrencyConverterApiApiKey(), from, to);
+        return converterSource.rate(from, to);
     }
 }
