@@ -33,17 +33,18 @@ public class TelegramBot extends TelegramLongPollingBot {
     @Override
     public void onUpdateReceived(Update update) {
         if (update.hasMessage() && update.getMessage().hasText()) {
-            String messageText = update.getMessage().getText();
             long chatId = update.getMessage().getChatId();
+            String messageText = update.getMessage().getText();
 
-            if (messageText.matches("\\b[a-zA-Z]{3,4}\\b\\s[a-zA-Z]{3,4}\\b")){
-                Pattern pattern = Pattern.compile("\\b[a-zA-Z]{3,4}\\b\\s[a-zA-Z]{3,4}\\b");
-                Matcher matcher = pattern.matcher(messageText);
-                if (matcher.find()) {
-
-                    String baseCurrency = matcher.group(1);
-                    String targetCurrency = matcher.group(2);
-                    currencyManager.updateConverter(baseCurrency, targetCurrency);
+            String[] currencies = messageText.trim().split("\\s+");
+            if (currencies.length == 2 && currencies[0].matches("\\b[a-zA-Z]{3,4}\\b") && currencies[1].matches("\\b[a-zA-Z]{3,4}\\b")) {
+                String baseCurrency = currencies[0];
+                String targetCurrency = currencies[1];
+                if (currencyManager.updateConverter(baseCurrency, targetCurrency)) {
+                    sendMessage(chatId, "Currencies has been successfully changed.");
+                }
+                else {
+                    sendMessage(chatId, "Currencies has not been changed.");
                 }
             }
             else {

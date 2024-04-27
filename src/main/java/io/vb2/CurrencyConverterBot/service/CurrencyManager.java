@@ -17,13 +17,19 @@ public class CurrencyManager {
         return value.multiply(Converter.convert(baseCurrency, targetCurrency));
     }
 
-    public void updateConverter(String baseToUpdate, String targetToUpdate) {
+    public boolean updateConverter(String baseToUpdate, String targetToUpdate) {
         try {
-            baseCurrency = Currency.valueOf(baseToUpdate);
-            targetCurrency = Currency.valueOf(targetToUpdate);
+            baseCurrency = Currency.valueOf(baseToUpdate.toUpperCase());
+            targetCurrency = Currency.valueOf(targetToUpdate.toUpperCase());
+            return true;
         } catch (IllegalArgumentException e) {
 
             throw new CurrencyConverterException(Messages.getInvalidCurrencyMessage(e.getMessage()));
         }
+    }
+
+    public void getCurrencies() {
+        System.out.println(baseCurrency.toString());
+        System.out.println(targetCurrency.toString());
     }
 }
