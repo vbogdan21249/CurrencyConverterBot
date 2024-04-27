@@ -3,8 +3,6 @@ package io.vb2.CurrencyConverterBot.service;
 import io.vb2.CurrencyConverterBot.Messages;
 import io.vb2.CurrencyConverterBot.enums.Currency;
 import io.vb2.CurrencyConverterBot.exception.CurrencyConverterException;
-import lombok.Getter;
-import lombok.Setter;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
@@ -24,6 +22,7 @@ public class CurrencyManager {
             baseCurrency = Currency.valueOf(baseToUpdate);
             targetCurrency = Currency.valueOf(targetToUpdate);
         } catch (IllegalArgumentException e) {
+
             throw new CurrencyConverterException(Messages.getInvalidCurrencyMessage(e.getMessage()));
         }
     }
