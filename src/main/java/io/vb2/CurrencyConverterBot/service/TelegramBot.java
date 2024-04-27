@@ -40,6 +40,7 @@ public class TelegramBot extends TelegramLongPollingBot {
                 Pattern pattern = Pattern.compile("\\b[a-zA-Z]{3,4}\\b\\s[a-zA-Z]{3,4}\\b");
                 Matcher matcher = pattern.matcher(messageText);
                 if (matcher.find()) {
+
                     String baseCurrency = matcher.group(1);
                     String targetCurrency = matcher.group(2);
                     currencyManager.updateConverter(baseCurrency, targetCurrency);
@@ -52,15 +53,6 @@ public class TelegramBot extends TelegramLongPollingBot {
                     throw new RuntimeException(e);
                 }
             }
-
-//              SendMessage message = new SendMessage(); // Create a message object object
-//            message.setChatId(chatId);
-//            message.setText(messageText);
-//            try {
-//                execute(message); // Sending our message object to user
-//            } catch (TelegramApiException e) {
-//                log.error("Error occurred: " + e.getMessage());
-//            }
         }
     }
 
