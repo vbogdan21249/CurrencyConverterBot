@@ -16,6 +16,7 @@ public class NetworkUtils {
     public static String getBufferReaderByUrl(String urlString, boolean isHttps) throws IOException {
         URL url = new URL(urlString);
         HttpURLConnection conn = isHttps ? (HttpsURLConnection) url.openConnection() : (HttpURLConnection) url.openConnection();
+
         conn.setRequestMethod("GET");
         conn.setRequestProperty("Accept", "application/json");
         conn.setRequestProperty("User-Agent", "Mozilla/5.0");
