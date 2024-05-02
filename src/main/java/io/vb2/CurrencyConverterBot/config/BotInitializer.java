@@ -1,7 +1,7 @@
 package io.vb2.CurrencyConverterBot.config;
 
 import io.vb2.CurrencyConverterBot.service.TelegramBot;
-import lombok.extern.slf4j.Slf4j;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.context.event.EventListener;
@@ -10,9 +10,10 @@ import org.telegram.telegrambots.meta.TelegramBotsApi;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import org.telegram.telegrambots.updatesreceivers.DefaultBotSession;
 
-@Slf4j
 @Component
 public class BotInitializer {
+    private static final Logger log = Logger.getLogger(BotInitializer.class);
+
     private final TelegramBot telegramBot;
     @Autowired
     public BotInitializer(TelegramBot telegramBot){

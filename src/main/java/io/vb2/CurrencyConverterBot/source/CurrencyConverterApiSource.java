@@ -12,7 +12,7 @@ import io.vb2.CurrencyConverterBot.utils.NetworkUtils;
 import org.apache.log4j.Logger;
 
 public class CurrencyConverterApiSource extends ConverterSource {
-        private static final Logger log = Logger.getLogger(ConverterSource.class);
+    private static final Logger log = Logger.getLogger(ConverterSource.class);
     public static final String SERVICE_NAME = "currencyconverterapi.com";
 
     public CurrencyConverterApiSource(ApiConfig apiConfig) {
