@@ -5,7 +5,7 @@ import io.vb2.CurrencyConverterBot.config.BotConfig;
 
 import io.vb2.CurrencyConverterBot.source.CurrencyConverterApiSource;
 import lombok.AllArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import org.apache.log4j.Logger;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
@@ -15,10 +15,10 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import java.io.IOException;
 import java.math.BigDecimal;
 
-@Slf4j
 @Component
 @AllArgsConstructor
 public class TelegramBot extends TelegramLongPollingBot {
+    private static final Logger log = Logger.getLogger(TelegramBot.class);
     
     private final ApiConfig apiConfig;
     private final BotConfig config;
@@ -77,7 +77,6 @@ public class TelegramBot extends TelegramLongPollingBot {
         try {
             execute(message);
         } catch (TelegramApiException e) {
-            System.out.println("Error occurred: " + e.getMessage());
             log.error("Error occurred: " + e.getMessage());
         }
     }
