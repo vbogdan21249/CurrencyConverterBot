@@ -3,7 +3,6 @@ package io.vb2.CurrencyConverterBot.service;
 import io.vb2.CurrencyConverterBot.Messages;
 import io.vb2.CurrencyConverterBot.enums.Currency;
 import io.vb2.CurrencyConverterBot.exception.CurrencyConverterException;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import java.io.IOException;
 import java.math.BigDecimal;
