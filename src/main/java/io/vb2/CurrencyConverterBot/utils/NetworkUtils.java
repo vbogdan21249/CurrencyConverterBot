@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
 
 public class NetworkUtils {
     private static final Logger log = Logger.getLogger(ConverterSource.class);
-    public static String getBufferReaderByUrl(String urlString, boolean isHttps) throws IOException {
+    public static String getBufferReaderByUrl(String urlString, boolean isHttps) throws IOException, CurrencyConverterException {
         URL url = new URL(urlString);
         HttpURLConnection conn = isHttps ? (HttpsURLConnection) url.openConnection() : (HttpURLConnection) url.openConnection();
 
@@ -26,11 +26,8 @@ public class NetworkUtils {
         conn.setRequestProperty("Cache-Control", "no-cache");
 
         if (conn.getResponseCode() != 200) {
-            Scanner s = new Scanner(conn.getErrorStream()).useDelimiter("\\A");
-            String serviceNetworkErrorMessage = s.hasNext() ? s.next() : "";
-
-            log.warn(Messages.getServiceNetworkErrorMessage(serviceNetworkErrorMessage));
-            throw new CurrencyConverterException(Messages.getServiceNetworkErrorMessage(serviceNetworkErrorMessage));
+            log.warn(Messages.getServiceNetworkErrorMessage());
+            throw new CurrencyConverterException(Messages.getServiceNetworkErrorMessage());
         }
 
         String currency = new BufferedReader(
