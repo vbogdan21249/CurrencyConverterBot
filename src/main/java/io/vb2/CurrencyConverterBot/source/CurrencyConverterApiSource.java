@@ -20,7 +20,7 @@ public class CurrencyConverterApiSource extends ConverterSource {
     }
 
     @Override
-    public BigDecimal rate(Currency from, Currency to) throws IOException {
+    public BigDecimal rate(Currency from, Currency to) throws IOException, CurrencyConverterException {
 
         String collected = NetworkUtils.getBufferReaderByUrl(getUrlString(from, to), true);
 

@@ -2,6 +2,7 @@ package io.vb2.CurrencyConverterBot.service;
 
 
 import io.vb2.CurrencyConverterBot.enums.Currency;
+import io.vb2.CurrencyConverterBot.exception.CurrencyConverterException;
 import io.vb2.CurrencyConverterBot.source.ConverterSource;
 
 import lombok.Getter;
@@ -16,7 +17,7 @@ public class Converter {
     @Getter
     @Setter
     private static ConverterSource converterSource;
-    public static BigDecimal convert(Currency from, Currency to) throws IOException {
+    public static BigDecimal convert(Currency from, Currency to) throws IOException, CurrencyConverterException {
         if (from.equals(to)) {
             return BigDecimal.ONE;
         }
