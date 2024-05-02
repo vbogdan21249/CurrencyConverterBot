@@ -8,10 +8,11 @@ import org.springframework.stereotype.Component;
 import java.io.IOException;
 import java.math.BigDecimal;
 import org.apache.log4j.Logger;
-@Slf4j
+
+
 @Component
 public class CurrencyManager {
-//    private static final Logger log = Logger.getLogger(CurrencyManager.class);
+    private static final Logger log = Logger.getLogger(CurrencyManager.class);
     private Currency baseCurrency = Currency.USD;
     private Currency targetCurrency = Currency.UAH;
 
