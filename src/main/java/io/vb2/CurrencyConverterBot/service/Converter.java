@@ -16,8 +16,10 @@ public class Converter {
     @Getter
     @Setter
     private static ConverterSource converterSource;
-
     public static BigDecimal convert(Currency from, Currency to) throws IOException {
+        if (from.equals(to)) {
+            return BigDecimal.ONE;
+        }
         return converterSource.rate(from, to);
     }
 }
