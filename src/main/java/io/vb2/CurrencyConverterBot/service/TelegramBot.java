@@ -1,6 +1,9 @@
 package io.vb2.CurrencyConverterBot.service;
 
+import io.vb2.CurrencyConverterBot.config.ApiConfig;
 import io.vb2.CurrencyConverterBot.config.BotConfig;
+
+import io.vb2.CurrencyConverterBot.source.CurrencyConverterApiSource;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -11,15 +14,15 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 import java.io.IOException;
 import java.math.BigDecimal;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 @Slf4j
 @Component
 @AllArgsConstructor
 public class TelegramBot extends TelegramLongPollingBot {
+    private final ApiConfig apiConfig;
     private final BotConfig config;
     private final CurrencyManager currencyManager;
+
     @Override
     public String getBotUsername() {
         return config.getBOT_NAME();
@@ -36,18 +39,25 @@ public class TelegramBot extends TelegramLongPollingBot {
             long chatId = update.getMessage().getChatId();
             String messageText = update.getMessage().getText();
 
+            if (Converter.getConverterSource() == null) {
+                Converter.setConverterSource(new CurrencyConverterApiSource(apiConfig));
+            }
+
+            if (messageText.equals("/start")) {
+                sendMessage(chatId, "Welcome to Currency Converter Bot! Please enter the amount and the currencies you want to convert.");
+                return;
+            }
+
             String[] currencies = messageText.trim().split("\\s+");
             if (currencies.length == 2 && currencies[0].matches("\\b[a-zA-Z]{3,4}\\b") && currencies[1].matches("\\b[a-zA-Z]{3,4}\\b")) {
                 String baseCurrency = currencies[0];
                 String targetCurrency = currencies[1];
                 if (currencyManager.updateConverter(baseCurrency, targetCurrency)) {
                     sendMessage(chatId, "Currencies has been successfully changed.");
-                }
-                else {
+                } else {
                     sendMessage(chatId, "Currencies has not been changed.");
                 }
-            }
-            else {
+            } else {
                 try {
                     sendMessage(chatId, currencyManager.convert(new BigDecimal(messageText)).toString());
                 } catch (IOException e) {
