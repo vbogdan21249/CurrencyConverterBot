@@ -1,20 +1,18 @@
 package io.vb2.CurrencyConverterBot.source;
 
 import com.google.gson.Gson;
-import io.vb2.CurrencyConverterBot.Messages;
+
 import io.vb2.CurrencyConverterBot.enums.Currency;
-import io.vb2.CurrencyConverterBot.exception.CurrencyConverterException;
 import io.vb2.CurrencyConverterBot.utils.NetworkUtils;
 import models.NBUCurrencyModel;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.math.BigDecimal;
-import java.net.URL;
-import java.util.Scanner;
+
 
 public class NBUSource extends ConverterSource {
-    public static final String SERVICE_NAME = "";
+    public static final String SERVICE_NAME = "bank.gov.ua";
+
     @Override
     public BigDecimal rate(Currency from, Currency to) throws IOException {
         String collected = NetworkUtils.getBufferReaderByUrl(getUrlString(to), true);
