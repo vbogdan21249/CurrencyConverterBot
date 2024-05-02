@@ -45,7 +45,7 @@ public class TelegramBot extends TelegramLongPollingBot {
             }
 
             if (messageText.equals("/start")) {
-                sendMessage(chatId, "Welcome to Currency Converter Bot! Please enter the amount and the currencies you want to convert.");
+                sendMessage(chatId, "Welcome to Currency Converter Bot!");
                 return;
             }
 
