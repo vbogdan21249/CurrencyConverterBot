@@ -3,15 +3,17 @@ package io.vb2.CurrencyConverterBot.service;
 import io.vb2.CurrencyConverterBot.Messages;
 import io.vb2.CurrencyConverterBot.enums.Currency;
 import io.vb2.CurrencyConverterBot.exception.CurrencyConverterException;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
-
 import java.io.IOException;
 import java.math.BigDecimal;
-
+import org.apache.log4j.Logger;
+@Slf4j
 @Component
 public class CurrencyManager {
-    private Currency baseCurrency = Currency.UAH;
-    private Currency targetCurrency = Currency.USD;
+//    private static final Logger log = Logger.getLogger(CurrencyManager.class);
+    private Currency baseCurrency = Currency.USD;
+    private Currency targetCurrency = Currency.UAH;
 
     public BigDecimal convert(BigDecimal value) throws IOException {
         return value.multiply(Converter.convert(baseCurrency, targetCurrency));
@@ -23,13 +25,8 @@ public class CurrencyManager {
             targetCurrency = Currency.valueOf(targetToUpdate.toUpperCase());
             return true;
         } catch (IllegalArgumentException e) {
-
+            log.error(Messages.getInvalidCurrencyMessage(e.getMessage()));
             throw new CurrencyConverterException(Messages.getInvalidCurrencyMessage(e.getMessage()));
         }
-    }
-
-    public void getCurrencies() {
-        System.out.println(baseCurrency.toString());
-        System.out.println(targetCurrency.toString());
     }
 }
