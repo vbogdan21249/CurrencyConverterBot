@@ -29,7 +29,7 @@ public class NetworkUtils {
             Scanner s = new Scanner(conn.getErrorStream()).useDelimiter("\\A");
             String serviceNetworkErrorMessage = s.hasNext() ? s.next() : "";
 
-            log.error(Messages.getServiceNetworkErrorMessage(serviceNetworkErrorMessage));
+            log.warn(Messages.getServiceNetworkErrorMessage(serviceNetworkErrorMessage));
             throw new CurrencyConverterException(Messages.getServiceNetworkErrorMessage(serviceNetworkErrorMessage));
         }
 
