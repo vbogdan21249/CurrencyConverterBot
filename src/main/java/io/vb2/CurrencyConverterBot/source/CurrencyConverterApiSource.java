@@ -8,9 +8,13 @@ import io.vb2.CurrencyConverterBot.enums.Currency;
 import io.vb2.CurrencyConverterBot.exception.CurrencyConverterException;
 import io.vb2.CurrencyConverterBot.Messages;
 import io.vb2.CurrencyConverterBot.utils.NetworkUtils;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.log4j.Logger;
 
 
+@Slf4j
 public class CurrencyConverterApiSource extends ConverterSource {
+    //    private static final Logger log = Logger.getLogger(ConverterSource.class);
     public static final String SERVICE_NAME = "currencyconverterapi.com";
 
     public CurrencyConverterApiSource(ApiConfig apiConfig) {
@@ -19,15 +23,14 @@ public class CurrencyConverterApiSource extends ConverterSource {
 
     @Override
     public BigDecimal rate(Currency from, Currency to) throws IOException {
-        System.out.println(from.toString() + " " + to.toString());
-        System.out.println(getUrlString(from, to));
+
         String collected = NetworkUtils.getBufferReaderByUrl(getUrlString(from, to), true);
-        System.out.println(collected);
+
         String[] splitCurrencyInfo = collected.split(":");
         if (splitCurrencyInfo.length != 2) {
+            log.error(Messages.getServiceUnavailableMessage(SERVICE_NAME));
             throw new CurrencyConverterException(Messages.getServiceUnavailableMessage(SERVICE_NAME));
-          }
-
+        }
         String rateString = splitCurrencyInfo[1].replace("}", "");
         return new BigDecimal(rateString);
     }

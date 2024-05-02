@@ -2,6 +2,8 @@ package io.vb2.CurrencyConverterBot.utils;
 
 import io.vb2.CurrencyConverterBot.exception.CurrencyConverterException;
 import io.vb2.CurrencyConverterBot.Messages;
+import io.vb2.CurrencyConverterBot.source.ConverterSource;
+import org.apache.log4j.Logger;
 
 import javax.net.ssl.HttpsURLConnection;
 import java.io.BufferedReader;
@@ -13,6 +15,7 @@ import java.util.Scanner;
 import java.util.stream.Collectors;
 
 public class NetworkUtils {
+    private static final Logger log = Logger.getLogger(ConverterSource.class);
     public static String getBufferReaderByUrl(String urlString, boolean isHttps) throws IOException {
         URL url = new URL(urlString);
         HttpURLConnection conn = isHttps ? (HttpsURLConnection) url.openConnection() : (HttpURLConnection) url.openConnection();
@@ -25,6 +28,8 @@ public class NetworkUtils {
         if (conn.getResponseCode() != 200) {
             Scanner s = new Scanner(conn.getErrorStream()).useDelimiter("\\A");
             String serviceNetworkErrorMessage = s.hasNext() ? s.next() : "";
+
+            log.error(Messages.getServiceNetworkErrorMessage(serviceNetworkErrorMessage));
             throw new CurrencyConverterException(Messages.getServiceNetworkErrorMessage(serviceNetworkErrorMessage));
         }
 
