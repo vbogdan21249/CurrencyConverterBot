@@ -12,6 +12,5 @@ import java.math.BigDecimal;
 @Component
 public abstract class ConverterSource {
     ApiConfig apiConfig;
-
     public abstract BigDecimal rate(Currency from, Currency to) throws IOException;
 }

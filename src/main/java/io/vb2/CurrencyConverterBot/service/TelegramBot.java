@@ -19,6 +19,7 @@ import java.math.BigDecimal;
 @Component
 @AllArgsConstructor
 public class TelegramBot extends TelegramLongPollingBot {
+    
     private final ApiConfig apiConfig;
     private final BotConfig config;
     private final CurrencyManager currencyManager;
@@ -61,6 +62,7 @@ public class TelegramBot extends TelegramLongPollingBot {
                 try {
                     sendMessage(chatId, currencyManager.convert(new BigDecimal(messageText)).toString());
                 } catch (IOException e) {
+                    log.error("Error occurred: " + e.getMessage());
                     throw new RuntimeException(e);
                 }
             }
@@ -75,6 +77,7 @@ public class TelegramBot extends TelegramLongPollingBot {
         try {
             execute(message);
         } catch (TelegramApiException e) {
+            System.out.println("Error occurred: " + e.getMessage());
             log.error("Error occurred: " + e.getMessage());
         }
     }
