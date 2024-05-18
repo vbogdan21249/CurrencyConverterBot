@@ -58,6 +58,7 @@ public class TelegramBot extends TelegramLongPollingBot {
                             "/start - start the bot\n" +
                             "/changeSource - change currency source\n" +
                             "Enter two currencies to change them (e.g. USD UAH)\n" +
+                            "(for this example, USD - source currency, UAH - target currency)\n" +
                             "Enter a number to convert it to the target currency\n");
                     return;
                 case "/changeSource":
