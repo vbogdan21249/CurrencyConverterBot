@@ -21,10 +21,10 @@ public class NBUSourceTest {
     }
 
     @Test
-    public void testRate_UAH_EUR() throws IOException, CurrencyConverterException {
-        when(nbuSource.rate(Currency.UAH, Currency.EUR)).thenReturn(BigDecimal.valueOf(1.2));
+    public void testRate_EUR_UAH() throws IOException, CurrencyConverterException {
+        when(nbuSource.rate(Currency.EUR, Currency.UAH)).thenReturn(BigDecimal.valueOf(1.2));
 
-        BigDecimal result = nbuSource.rate(Currency.UAH, Currency.EUR);
+        BigDecimal result = nbuSource.rate(Currency.EUR, Currency.UAH);
         assertEquals(BigDecimal.valueOf(1.2), result);
     }
 }

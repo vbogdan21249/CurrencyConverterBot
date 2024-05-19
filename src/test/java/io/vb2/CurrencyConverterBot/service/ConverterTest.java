@@ -4,43 +4,62 @@ import io.vb2.CurrencyConverterBot.enums.Currency;
 import io.vb2.CurrencyConverterBot.exception.CurrencyConverterException;
 import io.vb2.CurrencyConverterBot.source.ConverterSource;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.BeforeEach;
+
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
+import org.springframework.boot.test.context.SpringBootTest;
 
 import java.io.IOException;
 import java.math.BigDecimal;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-
-import static org.mockito.Mockito.mock;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.when;
 
+@SpringBootTest
 public class ConverterTest {
+
+    @Mock
+    private ConverterSource mockConverterSource;
+
+    @InjectMocks
+    private Converter converter;
+
+    @BeforeEach
+    public void setUp() {
+        MockitoAnnotations.openMocks(this);
+    }
 
     @Test
     public void testConvertSameCurrency() throws IOException, CurrencyConverterException {
-        ConverterSource mockConverterSource = mock(ConverterSource.class);
-        Converter.setConverterSource(mockConverterSource);
-
-        Currency currency = Currency.USD;
-
-        BigDecimal result = Converter.convert(currency, currency);
-
-        assertEquals(BigDecimal.ONE, result, "Conversion should return 1 for same currency");
+        Currency usd = Currency.USD;
+        BigDecimal result = Converter.convert(usd, usd);
+        assertEquals(BigDecimal.ONE, result);
     }
 
-
     @Test
-    public void testConvertDifferentCurrency() throws IOException, CurrencyConverterException {
-        ConverterSource mockConverterSource = mock(ConverterSource.class);
+    public void testConvertDifferentCurrencies() throws IOException, CurrencyConverterException {
+        Currency usd = Currency.USD;
+        Currency eur = Currency.EUR;
+        BigDecimal expectedRate = new BigDecimal("0.85");
+
+        when(mockConverterSource.rate(usd, eur)).thenReturn(expectedRate);
         Converter.setConverterSource(mockConverterSource);
 
-        Currency from = Currency.USD;
-        Currency to = Currency.EUR;
-        BigDecimal conversionRate = BigDecimal.valueOf(1.2); // Dummy conversion rate
+        BigDecimal result = Converter.convert(usd, eur);
+        assertEquals(expectedRate, result);
+    }
 
-        when(mockConverterSource.rate(from, to)).thenReturn(conversionRate);
+    @Test
+    public void testConvertThrowsException() throws IOException, CurrencyConverterException {
+        Currency usd = Currency.USD;
+        Currency eur = Currency.EUR;
 
-        BigDecimal result = Converter.convert(from, to);
+        when(mockConverterSource.rate(usd, eur)).thenThrow(new CurrencyConverterException("Currency converter error"));
 
-        assertEquals(conversionRate, result, "Conversion should return correct conversion rate");
+        Converter.setConverterSource(mockConverterSource);
+        assertThrows(CurrencyConverterException.class, () -> Converter.convert(usd, eur));
     }
 }

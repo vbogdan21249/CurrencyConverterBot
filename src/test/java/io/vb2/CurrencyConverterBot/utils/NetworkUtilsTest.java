@@ -15,8 +15,8 @@ public class NetworkUtilsTest {
     public void testGet() throws IOException {
         String url = "https://api.exchangerate-api.com/v4/latest/USD";
         String response = NetworkUtils.getBufferReaderByUrl(url, true);
-
-        assertNotNull(response, "Response should not be null");
+        System.out.println(response);
+        assertNotNull(response);
     }
 
     @Test
